@@ -1,0 +1,12 @@
+## Interface: 16001, 16002, 120007
+## Title: Outgrown Forever
+## Notes: Know when your gear has fallen behind, and spot upgrades as you find them.
+## Author: Robin Grass <hej@carbin.se>
+## IconTexture: Interface\Icons\Trade_BlackSmithing
+## Version: 0.8.4
+## SavedVariables: OutgrownForeverDB
+
+Strings.lua
+Data.lua
+Grading.lua
+Outgrown.lua
