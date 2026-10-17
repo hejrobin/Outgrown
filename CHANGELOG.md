@@ -1,5 +1,11 @@
 # Changelog
 
+## 0.8.6 (2026-10-17)
+
+### Changes
+
+- Upscaled texture icons.
+
 ## 0.8.5 (2026-10-17)
 
 ### Features
