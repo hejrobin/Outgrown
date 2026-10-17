@@ -3,7 +3,7 @@
 ## Notes: Know when your gear has fallen behind, and spot upgrades as you find them.
 ## Author: Robin Grass <hej@carbin.se>
 ## IconTexture: Interface\Icons\Trade_BlackSmithing
-## Version: 0.8.4
+## Version: 0.8.5
 ## SavedVariables: OutgrownForeverDB
 
 Strings.lua

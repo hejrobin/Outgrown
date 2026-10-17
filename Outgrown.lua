@@ -6,10 +6,12 @@
 -- Character window: orange = L.UPGRADE_SOON, red = L.NEEDS_UPGRADE
 -- Bags and quest rewards: green glow = upgrade over what you're wearing
 
-local _, ns = ...
+local addonName, ns = ...
 local D = ns.Data
 local L = ns.L
 local Grading = ns.Grading
+
+local TEXTURES = "Interface\\AddOns\\" .. addonName .. "\\Assets\\Textures\\"
 
 local STYLES = {
 	red = {
@@ -17,15 +19,18 @@ local STYLES = {
 		g = 0.15,
 		b = 0.15,
 		text = L.NEEDS_UPGRADE,
+		arrow = TEXTURES .. "OutgrownRed",
 	},
 	orange = {
 		r = 1.0,
 		g = 0.55,
 		b = 0.0,
 		text = L.UPGRADE_SOON,
+		arrow = TEXTURES .. "OutgrownOrange",
 	},
 	upgrade = {
 		r = 0.2, g = 1.0, b = 0.2,
+		arrow = TEXTURES .. "OutgrownGreen",
 	},
 }
 
@@ -38,6 +43,8 @@ local LOGIN_RETRIES = 3            -- extra tries if item info hasn't loaded yet
 -- Overlay strength (0 = invisible, 1 = solid). Lower = softer.
 local TINT_ALPHA = 0.15
 local GLOW_ALPHA = 0.55
+
+local ARROW_SIZE = 24
 
 -- Shirt and tabard are excluded because they are cosmetic.
 local SLOTS = {
@@ -76,16 +83,22 @@ local function GetOverlay(button, anchor)
 	anchor = anchor or button
 
 	overlay = {}
-	overlay.tint = button:CreateTexture(nil, "OVERLAY", nil, 6)
+	overlay.tint = button:CreateTexture(nil, "OVERLAY", nil, 5)
 	overlay.tint:SetAllPoints(anchor)
 
-	overlay.glow = button:CreateTexture(nil, "OVERLAY", nil, 7)
+	overlay.glow = button:CreateTexture(nil, "OVERLAY", nil, 6)
 	overlay.glow:SetTexture("Interface\\Buttons\\UI-ActionButton-Border")
 	overlay.glow:SetBlendMode("ADD")
 
 	local width, height = anchor:GetSize()
 	overlay.glow:SetSize(width * 1.8, height * 1.8)
 	overlay.glow:SetPoint("CENTER", anchor, "CENTER")
+
+	-- The art is 24x24 in the bottom-left of a 32x32 canvas.
+	overlay.arrow = button:CreateTexture(nil, "OVERLAY", nil, 7)
+	overlay.arrow:SetTexCoord(0, 0.75, 0.25, 1)
+	overlay.arrow:SetSize(ARROW_SIZE, ARROW_SIZE)
+	overlay.arrow:SetPoint("BOTTOMLEFT", anchor, "BOTTOMLEFT")
 
 	overlays[button] = overlay
 	return overlay
@@ -97,6 +110,7 @@ local function SetHighlight(button, grade, anchor)
 		if overlay then
 			overlay.tint:Hide()
 			overlay.glow:Hide()
+			overlay.arrow:Hide()
 		end
 		return
 	end
@@ -107,6 +121,8 @@ local function SetHighlight(button, grade, anchor)
 	overlay.glow:SetVertexColor(style.r, style.g, style.b, GLOW_ALPHA)
 	overlay.tint:Show()
 	overlay.glow:Show()
+	overlay.arrow:SetTexture(style.arrow)
+	overlay.arrow:Show()
 end
 
 local function UpdateCharacter()
