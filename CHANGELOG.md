@@ -1,5 +1,13 @@
 # Changelog
 
+## 0.8.7 (2026-10-17)
+
+### Changes
+
+- Redesigned texture icons
+- Included PSD source file
+- Added licence
+
 ## 0.8.6 (2026-10-17)
 
 ### Changes
