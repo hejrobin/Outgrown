@@ -6,12 +6,10 @@
 -- Character window: orange = L.UPGRADE_SOON, red = L.NEEDS_UPGRADE
 -- Bags and quest rewards: green glow = upgrade over what you're wearing
 
-local addonName, ns = ...
+local _, ns = ...
 local D = ns.Data
 local L = ns.L
 local Grading = ns.Grading
-
-local TEXTURES = "Interface\\AddOns\\" .. addonName .. "\\Assets\\Textures\\"
 
 local STYLES = {
 	red = {
@@ -19,18 +17,15 @@ local STYLES = {
 		g = 0.15,
 		b = 0.15,
 		text = L.NEEDS_UPGRADE,
-		arrow = TEXTURES .. "OutgrownRed",
 	},
 	orange = {
 		r = 1.0,
 		g = 0.55,
 		b = 0.0,
 		text = L.UPGRADE_SOON,
-		arrow = TEXTURES .. "OutgrownOrange",
 	},
 	upgrade = {
 		r = 0.2, g = 1.0, b = 0.2,
-		arrow = TEXTURES .. "OutgrownGreen",
 	},
 }
 
@@ -42,9 +37,25 @@ local LOGIN_RETRIES = 3            -- extra tries if item info hasn't loaded yet
 
 -- Overlay strength (0 = invisible, 1 = solid). Lower = softer.
 local TINT_ALPHA = 0.15
-local GLOW_ALPHA = 0.55
+local GLOW_ALPHA = 0.35
 
-local ARROW_SIZE = 24
+-- Arrow drawn on top of highlighted items, one image per highlight.
+-- The files can be any power-of-two size (e.g. 32x32); they're drawn at
+-- ARROW_SCALE times the icon's width, inside the icon's ARROW_CORNER.
+local ARROW_PATH = "Interface\\AddOns\\Outgrown\\Assets\\Textures\\"
+local ARROW_TEXTURES = {
+	upgrade = ARROW_PATH .. "OutgrownGreen",    -- upgrade in bags / quest rewards
+	orange  = ARROW_PATH .. "OutgrownOrange",   -- upgrade soon
+	red     = ARROW_PATH .. "OutgrownRed",      -- needs upgrade
+}
+local ARROW_SCALE = 0.6
+local ARROW_CORNER = "BOTTOMLEFT"
+local ARROW_OFFSET_X = -3
+local ARROW_OFFSET_Y = -3
+local ARROW_INSET = 1 -- pixels between the arrow and the icon's edge
+-- Part of the file to draw: left, right, top, bottom (0-1). Trim these
+-- inwards if the image has empty space around the arrow.
+local ARROW_TEXCOORD = { 0, 1, 0, 1 }
 
 -- Shirt and tabard are excluded because they are cosmetic.
 local SLOTS = {
@@ -83,10 +94,10 @@ local function GetOverlay(button, anchor)
 	anchor = anchor or button
 
 	overlay = {}
-	overlay.tint = button:CreateTexture(nil, "OVERLAY", nil, 5)
+	overlay.tint = button:CreateTexture(nil, "OVERLAY", nil, 6)
 	overlay.tint:SetAllPoints(anchor)
 
-	overlay.glow = button:CreateTexture(nil, "OVERLAY", nil, 6)
+	overlay.glow = button:CreateTexture(nil, "OVERLAY", nil, 7)
 	overlay.glow:SetTexture("Interface\\Buttons\\UI-ActionButton-Border")
 	overlay.glow:SetBlendMode("ADD")
 
@@ -94,11 +105,17 @@ local function GetOverlay(button, anchor)
 	overlay.glow:SetSize(width * 1.8, height * 1.8)
 	overlay.glow:SetPoint("CENTER", anchor, "CENTER")
 
-	-- The art is 24x24 in the bottom-left of a 32x32 canvas.
+	-- Kept inside the icon, so scroll frames and neighbouring slots can't clip it.
 	overlay.arrow = button:CreateTexture(nil, "OVERLAY", nil, 7)
-	overlay.arrow:SetTexCoord(0, 0.75, 0.25, 1)
-	overlay.arrow:SetSize(ARROW_SIZE, ARROW_SIZE)
-	overlay.arrow:SetPoint("BOTTOMLEFT", anchor, "BOTTOMLEFT")
+	overlay.arrow:SetTexCoord(unpack(ARROW_TEXCOORD))
+	local size = math.floor(width * ARROW_SCALE + 0.5)
+	overlay.arrow:SetSize(size, size)
+
+	local insetX = ARROW_CORNER:find("LEFT") and ARROW_INSET or -ARROW_INSET
+	local insetY = ARROW_CORNER:find("TOP") and -ARROW_INSET or ARROW_INSET
+
+	overlay.arrow:SetPoint(ARROW_CORNER, anchor, ARROW_CORNER, insetX + ARROW_OFFSET_X, insetY + ARROW_OFFSET_Y)
+	overlay.arrow:Hide()
 
 	overlays[button] = overlay
 	return overlay
@@ -121,7 +138,7 @@ local function SetHighlight(button, grade, anchor)
 	overlay.glow:SetVertexColor(style.r, style.g, style.b, GLOW_ALPHA)
 	overlay.tint:Show()
 	overlay.glow:Show()
-	overlay.arrow:SetTexture(style.arrow)
+	overlay.arrow:SetTexture(ARROW_TEXTURES[grade])
 	overlay.arrow:Show()
 end
 
@@ -383,7 +400,7 @@ local function CheckOnLogin(attempt)
 	end
 
 	if anyFlagged then
-		print(("|T%s:0|t |cff%s%s|r"):format(ADDON_ICON, LOGIN_MESSAGE_HEX, L.LOGIN_MESSAGE))
+		print(("|T%s:0|t |cff%s%s|r"):format(ARROW_TEXTURES.orange, LOGIN_MESSAGE_HEX, L.LOGIN_MESSAGE))
 	end
 end
 
