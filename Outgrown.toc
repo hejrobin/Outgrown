@@ -2,8 +2,8 @@
 ## Title: Outgrown Forever
 ## Notes: Know when your gear has fallen behind, and spot upgrades as you find them.
 ## Author: Robin Grass <hej@carbin.se>
-## IconTexture: Interface\Icons\Trade_BlackSmithing
-## Version: 0.8.6
+## IconTexture: Interface\AddOns\Outgrown\Assets\Textures\OutgrownOrange
+## Version: 0.8.7
 ## SavedVariables: OutgrownForeverDB
 
 Strings.lua
