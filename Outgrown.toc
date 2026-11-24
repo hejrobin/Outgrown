@@ -3,7 +3,8 @@
 ## Notes: Know when your gear has fallen behind, and spot upgrades as you find them.
 ## Author: Robin Grass <hej@carbin.se>
 ## IconTexture: Interface\AddOns\Outgrown\Assets\Textures\OutgrownOrange
-## Version: 0.8.7
+## Version: @project-version@
+## X-Curse-Project-ID: 1828478
 ## SavedVariables: OutgrownForeverDB
 
 Strings.lua

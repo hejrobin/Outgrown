@@ -1,0 +1,8 @@
+package-as: Outgrown
+
+manual-changelog:
+  filename: CHANGELOG.md
+  markup-type: markdown
+
+ignore:
+  - Assets/Source
