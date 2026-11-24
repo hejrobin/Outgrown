@@ -31,7 +31,6 @@ local STYLES = {
 
 -- Chat message shown on login/reload when any equipped item is flagged.
 local LOGIN_MESSAGE_HEX = "42b1fe" -- soft blue
-local ADDON_ICON = "Interface\\Icons\\Trade_BlackSmithing"
 local LOGIN_DELAY = 3              -- seconds after login/reload before checking
 local LOGIN_RETRIES = 3            -- extra tries if item info hasn't loaded yet
 
@@ -44,9 +43,9 @@ local GLOW_ALPHA = 0.35
 -- ARROW_SCALE times the icon's width, inside the icon's ARROW_CORNER.
 local ARROW_PATH = "Interface\\AddOns\\Outgrown\\Assets\\Textures\\"
 local ARROW_TEXTURES = {
-	upgrade = ARROW_PATH .. "OutgrownGreen",    -- upgrade in bags / quest rewards
-	orange  = ARROW_PATH .. "OutgrownOrange",   -- upgrade soon
-	red     = ARROW_PATH .. "OutgrownRed",      -- needs upgrade
+	upgrade = ARROW_PATH .. "OutgrownGreen", -- upgrade in bags / quest rewards
+	orange  = ARROW_PATH .. "OutgrownOrange", -- upgrade soon
+	red     = ARROW_PATH .. "OutgrownRed",   -- needs upgrade
 }
 local ARROW_SCALE = 0.6
 local ARROW_CORNER = "BOTTOMLEFT"
@@ -419,8 +418,8 @@ local TALENT_EVENTS = {
 	CHARACTER_POINTS_CHANGED = true,
 	PLAYER_TALENT_UPDATE = true,
 	ACTIVE_TALENT_GROUP_CHANGED = true,
-	PLAYER_ENTERING_WORLD = true,   -- talent data is often ready by now
-	SPELLS_CHANGED = true,          -- and fires again once it loads
+	PLAYER_ENTERING_WORLD = true, -- talent data is often ready by now
+	SPELLS_CHANGED = true,       -- and fires again once it loads
 }
 local QUEST_EVENTS = {
 	QUEST_LOG_UPDATE = true,
