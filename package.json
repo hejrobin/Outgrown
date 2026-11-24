@@ -1,0 +1,8 @@
+{
+	"name": "outgrown",
+	"private": true,
+	"scripts": {
+		"release": "bash scripts/release.sh release",
+		"release:beta": "bash scripts/release.sh beta"
+	}
+}
